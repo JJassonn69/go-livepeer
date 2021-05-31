@@ -123,10 +123,10 @@ type authWebhookResponse struct {
 			SampleRate uint `json:"sampleRate"`
 			Classes    []struct {
 				ID   int    `json:"id"`
-				Name string `json: "name"`
+				Name string `json:"name"`
 			} `json:"classes"`
-		} `json: "sceneClassifcationProfile"`
-	} `json: "detection"`
+		} `json:"sceneClassifcationProfile"`
+	} `json:"detection"`
 }
 
 func NewLivepeerServer(rtmpAddr string, lpNode *core.LivepeerNode, httpIngest bool, transcodingOptions string) (*LivepeerServer, error) {
