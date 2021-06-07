@@ -17,7 +17,7 @@ func TestEV(t *testing.T) {
 		WinProb:   new(big.Int).Div(maxWinProb, big.NewInt(2)),
 	}
 
-	assert.Equal("500", ticket.EV().FloatString(0))
+	assert.Equal("5", ticket.EV().FloatString(0))
 
 	ticket = &Ticket{
 		FaceValue: big.NewInt(1000),
@@ -31,7 +31,7 @@ func TestEV(t *testing.T) {
 		WinProb:   maxWinProb,
 	}
 
-	assert.Equal("1000", ticket.EV().FloatString(0))
+	assert.Equal("10", ticket.EV().FloatString(0))
 
 	ticket = &Ticket{
 		FaceValue: big.NewInt(0),

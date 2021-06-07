@@ -220,7 +220,11 @@ func (e *TicketExpirationParams) AuxData() []byte {
 }
 
 func ticketEV(faceValue *big.Int, winProb *big.Int) *big.Rat {
-	return new(big.Rat).Mul(new(big.Rat).SetInt(faceValue), new(big.Rat).SetFrac(winProb, maxWinProb))
+	return new(big.Rat).Mul(
+		new(big.Rat).SetFrac(faceValue, EVMultiplier),
+		new(big.Rat).SetFrac(winProb, maxWinProb),
+	)
+
 }
 
 func winProbRat(winProb *big.Int) *big.Rat {
