@@ -270,7 +270,6 @@ func main() {
 			// FIXME: Short-term hack to pre-load the detection model for the whole node
 			if *sceneClassification {
 				detectorProfile := ffmpeg.DSceneAdultSoccer
-				detectorProfile.ModelPath = fmt.Sprintf("%s/%s", core.WorkDir, ffmpeg.DSceneAdultSoccer.ModelPath)
 				err = ffmpeg.InitFFmpegWithDetectorProfile(&detectorProfile, strings.Join(devices, ","))
 				if err != nil {
 					glog.Fatalf("Could not initialize detector profiles")
