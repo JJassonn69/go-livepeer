@@ -62,6 +62,8 @@ const StreamKeyBytes = 6
 const SegLen = 2 * time.Second
 const BroadcastRetry = 15 * time.Second
 
+const AISessionManagerTTL = 10 * time.Minute
+
 var BroadcastJobVideoProfiles = []ffmpeg.VideoProfile{ffmpeg.P240p30fps4x3, ffmpeg.P360p30fps16x9}
 
 var AuthWebhookURL *url.URL
@@ -110,6 +112,8 @@ type LivepeerServer struct {
 	HTTPMux                 *http.ServeMux
 	ExposeCurrentManifest   bool
 	recordingsAuthResponses *cache.Cache
+
+	AISessionManager *AISessionManager
 
 	// Thread sensitive fields. All accesses to the
 	// following fields should be protected by `connectionLock`
@@ -184,9 +188,12 @@ func NewLivepeerServer(rtmpAddr string, lpNode *core.LivepeerNode, httpIngest bo
 		rtmpConnections:         make(map[core.ManifestID]*rtmpConnection),
 		internalManifests:       make(map[core.ManifestID]core.ManifestID),
 		recordingsAuthResponses: cache.New(time.Hour, 2*time.Hour),
+		AISessionManager:        NewAISessionManager(lpNode, AISessionManagerTTL),
 	}
 	if lpNode.NodeType == core.BroadcasterNode && httpIngest {
 		opts.HttpMux.HandleFunc("/live/", ls.HandlePush)
+
+		startAIMediaServer(ls)
 	}
 	opts.HttpMux.HandleFunc("/recordings/", ls.HandleRecordings)
 	return ls, nil
@@ -524,17 +531,8 @@ func (s *LivepeerServer) registerConnection(ctx context.Context, rtmpStrm stream
 	// do not obtain this lock again while initializing channel is open, it will cause deadlock if other goroutine already obtained the lock and called getActiveRtmpConnectionUnsafe()
 	s.connectionLock.Unlock()
 
-	// initialize session manager
-	var stakeRdr stakeReader
-	if s.LivepeerNode.Eth != nil {
-		stakeRdr = &storeStakeReader{store: s.LivepeerNode.Database}
-	}
-	selFactory := func() BroadcastSessionsSelector {
-		return NewMinLSSelector(stakeRdr, SELECTOR_LATENCY_SCORE_THRESHOLD, s.LivepeerNode.SelectionAlgorithm, s.LivepeerNode.OrchPerfScore)
-	}
-
 	// safe, because other goroutines should be waiting on initializing channel
-	cxn.sessManager = NewSessionManager(ctx, s.LivepeerNode, params, selFactory)
+	cxn.sessManager = NewSessionManager(ctx, s.LivepeerNode, params)
 
 	// populate fields and signal initializing channel
 	s.serverLock.Lock()
@@ -712,7 +710,8 @@ type BreakOperation bool
 func (s *LivepeerServer) HandlePush(w http.ResponseWriter, r *http.Request) {
 	errorOut := func(status int, s string, params ...interface{}) {
 		httpErr := fmt.Sprintf(s, params...)
-		glog.Error(httpErr)
+		statusErr := fmt.Sprintf(" statusCode=%d", status)
+		glog.Error(httpErr + statusErr)
 		http.Error(w, httpErr, status)
 	}
 
@@ -1016,7 +1015,7 @@ func (s *LivepeerServer) HandlePush(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(urls) == 0 {
 		if len(cxn.params.Profiles) > 0 {
-			clog.Errorf(ctx, "No sessions available name=%s url=%s", fname, r.URL)
+			clog.Errorf(ctx, "No sessions available name=%s url=%s statusCode=%d", fname, r.URL, http.StatusServiceUnavailable)
 			http.Error(w, "No sessions available", http.StatusServiceUnavailable)
 		}
 		return
