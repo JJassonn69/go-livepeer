@@ -19,7 +19,7 @@ require (
 	github.com/livepeer/lpms v0.0.0-20240909171057-fe5aff1fa6a2
 	github.com/livepeer/m3u8 v0.11.1
 	github.com/mattn/go-sqlite3 v1.14.18
-	github.com/oapi-codegen/nethttp-middleware v1.0.1
+	github.com/oapi-codegen/nethttp-middleware v1.0.2
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/patrickmn/go-cache v2.1.0+incompatible
@@ -110,7 +110,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.4 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/graph-gophers/graphql-go v1.3.0 // indirect
 	github.com/hashicorp/go-bexpr v0.1.10 // indirect
