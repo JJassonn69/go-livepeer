@@ -12,14 +12,14 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
 	github.com/jaypipes/ghw v0.10.0
-	github.com/jaypipes/pcidb v1.0.0
+	github.com/jaypipes/pcidb v1.0.1
 	github.com/livepeer/ai-worker v0.12.1
 	github.com/livepeer/go-tools v0.3.6-0.20240130205227-92479de8531b
 	github.com/livepeer/livepeer-data v0.7.5-0.20231004073737-06f1f383fb18
 	github.com/livepeer/lpms v0.0.0-20240909171057-fe5aff1fa6a2
 	github.com/livepeer/m3u8 v0.11.1
-	github.com/mattn/go-sqlite3 v1.14.24
-	github.com/oapi-codegen/nethttp-middleware v1.0.1
+	github.com/mattn/go-sqlite3 v1.14.18
+	github.com/oapi-codegen/nethttp-middleware v1.0.2
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/patrickmn/go-cache v2.1.0+incompatible
@@ -32,7 +32,7 @@ require (
 	go.opencensus.io v0.24.0
 	go.uber.org/goleak v1.3.0
 	golang.org/x/net v0.28.0
-	golang.org/x/sys v0.26.0
+	golang.org/x/sys v0.27.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.1
 	pgregory.net/rapid v1.1.0
@@ -110,7 +110,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.4 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/graph-gophers/graphql-go v1.3.0 // indirect
 	github.com/hashicorp/go-bexpr v0.1.10 // indirect
