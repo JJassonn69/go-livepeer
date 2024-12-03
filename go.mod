@@ -32,7 +32,7 @@ require (
 	go.opencensus.io v0.24.0
 	go.uber.org/goleak v1.3.0
 	golang.org/x/net v0.28.0
-	golang.org/x/sys v0.26.0
+	golang.org/x/sys v0.27.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.1
 	pgregory.net/rapid v1.1.0
